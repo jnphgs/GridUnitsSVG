@@ -1,5 +1,4 @@
 import processing.svg.*;
-boolean bSave = false;
 PFont font;
 CustomGrid customGrid = new CustomGrid();
 
@@ -10,35 +9,60 @@ void setup(){
 }
 
 void draw(){
-  if(bSave){
-    
-    customGrid.Dashed(true).Main(1, 2).export();
-    customGrid.Main(2, 2).export();
-    customGrid.Main(3, 2).export();
-    customGrid.Main(4, 2).export();
-    customGrid.Main(5, 2).export();
-    customGrid.SubGrid(1, 2, 1).export();
-    customGrid.SubGrid(2, 2, 1).export();
-    customGrid.SubGrid(2, 5, 1).export();
-    customGrid.SubGrid(3, 3, 1).export();
-    customGrid.SubGrid(3, 5, 1).export();
-    customGrid.SubGrid(4, 2, 1).export();
-    customGrid.SubGrid(4, 4, 1).export();
-    customGrid.SubGrid(4, 5, 1).export();
-    customGrid.SubGrid(5, 4, 1).export();
-    customGrid.SubGrid(5, 5, 1).export();
-    bSave = false;
-    exit();
-  }
-  
-  customGrid.Dashed(true).Main(4, 4).render();
-  
+  //customGrid.StrokeWidth(4).Corner(1, CornerPattern.Plus, width/12).render();
+  //customGrid.StrokeWidth(4).Corner(1, CornerPattern.Cross, width/12).render();
+  customGrid.StrokeWidth(4).Corner(1, CornerPattern.Circle, width/12).render();
 }
 
 void keyPressed(){
   switch(key){
     case 's':
-      bSave = true;
+      customGrid.StrokeWidth(4).Dashed(false); // style 
+      customGrid.Main(1).export();
+      customGrid.Main(2).export();
+      customGrid.Main(4).export();
+      customGrid.Main(5).export();
+      
+      customGrid.StrokeWidth(4).Dashed(false); // style
+      customGrid.SubGrid(1, 2).export();
+      customGrid.SubGrid(2, 2).export();
+      customGrid.SubGrid(2, 5).export();
+      customGrid.SubGrid(4, 2).export();
+      customGrid.SubGrid(4, 4).export();
+      customGrid.SubGrid(4, 5).export();
+      customGrid.SubGrid(5, 4).export();
+      customGrid.SubGrid(5, 5).export();
+      
+      customGrid.StrokeWidth(4).Dashed(true); // style 
+      customGrid.Main(1).export();
+      customGrid.Main(2).export();
+      customGrid.Main(4).export();
+      customGrid.Main(5).export();
+      
+      customGrid.StrokeWidth(4).Dashed(true); // style
+      customGrid.SubGrid(1, 2).export();
+      customGrid.SubGrid(2, 2).export();
+      customGrid.SubGrid(2, 5).export();
+      customGrid.SubGrid(4, 2).export();
+      customGrid.SubGrid(4, 4).export();
+      customGrid.SubGrid(4, 5).export();
+      customGrid.SubGrid(5, 4).export();
+      customGrid.SubGrid(5, 5).export();
+      
+      customGrid.StrokeWidth(8); // style
+      customGrid.Corner(1, CornerPattern.Plus, width/12).export();
+      customGrid.Corner(1, CornerPattern.Cross, width/12).export();
+      customGrid.Corner(1, CornerPattern.Circle, width/12).export();
+      
+      customGrid.StrokeWidth(4); // style
+      customGrid.Corner(2, CornerPattern.Plus, width/24).export();
+      customGrid.Corner(2, CornerPattern.Cross, width/24).export();
+      customGrid.Corner(2, CornerPattern.Circle, width/24).export();
+      
+      customGrid.Corner(4, CornerPattern.Plus, width/48).export();
+      customGrid.Corner(4, CornerPattern.Cross, width/48).export();
+      customGrid.Corner(4, CornerPattern.Circle, width/48).export();
+      exit();
       break;
     default:
       break;

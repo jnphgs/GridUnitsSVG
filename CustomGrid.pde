@@ -1,31 +1,46 @@
 enum Pattern{
   MainGrid,
   SubGrid,
+  Corner
 }
-  
+
+enum CornerPattern{
+  Plus,
+  Cross,
+  Circle
+}
+
 class CustomGrid{
   CustomGrid(){
   }
   int grid = 8;
   
   Pattern pattern = Pattern.MainGrid;
-  int mainGridWeight = 2;
+  CornerPattern cornerPattern = CornerPattern.Plus;
+  float strokeWidth = 2;
   int subGrid = 8;
-  int subGridWeight = 1;
-  boolean dashed = false;
   
-  CustomGrid Main(int gridNum, int mainGridWeight){
+  boolean dashed = false;
+  float cornerShapeSize = 10;
+  
+  CustomGrid Main(int gridNum){
     pattern = Pattern.MainGrid;
     this.grid = gridNum;
-    this.mainGridWeight = mainGridWeight;
     return this;
   }
   
-  CustomGrid SubGrid(int gridNum, int subGridNum, int subGridWeight){
+  CustomGrid SubGrid(int gridNum, int subGridNum){
     pattern = Pattern.SubGrid;
     this.grid = gridNum;
     this.subGrid = subGridNum;
-    this.subGridWeight = subGridWeight;
+    return this;
+  }
+  
+  CustomGrid Corner(int gridNum, CornerPattern cornerPattern, int cornerShapeSize){
+    pattern = Pattern.Corner;
+    this.grid = gridNum;
+    this.cornerPattern = cornerPattern;
+    this.cornerShapeSize = cornerShapeSize;
     return this;
   }
   
@@ -34,19 +49,43 @@ class CustomGrid{
     return this;
   }
   
+  CustomGrid StrokeWidth(float strokeWidth){
+    this.strokeWidth = strokeWidth;
+    return this;
+  }
+  
   String getName(String dst){
     String filename = dst+"T_";
     filename += "Grid" + grid;
+    String dash_str = dashed ? "Dash" : "";
     switch(pattern){
       case MainGrid:
-        filename += "_MainW" + mainGridWeight;
+        filename += "_Main" + dash_str + "W" + int(strokeWidth);
         break;
       case SubGrid:
-        filename += "_Sub" + subGrid + "W" + subGridWeight;
+        filename += "_Sub" + subGrid + dash_str + "W" + int(strokeWidth);
+        break;
+      case Corner:
         break;
       default:
         break;
     }
+    if(pattern == Pattern.Corner){
+      switch(cornerPattern){
+        case Plus:
+          filename += "_Plus" + "W" + int(strokeWidth) + "S" + int(cornerShapeSize);
+          break;
+        case Cross:
+          filename += "_Cross" + "W" + int(strokeWidth) + "S" + int(cornerShapeSize);
+          break;
+        case Circle:
+          filename += "_Ciecle" + "W" + int(strokeWidth) + "S" + int(cornerShapeSize);
+          break;
+        default:
+          break;
+      }
+    }
+    
     return filename + ".svg";
   }
   
@@ -60,6 +99,9 @@ class CustomGrid{
         break;
       case SubGrid:
         drawSubGrid();
+        break;
+      case Corner:
+        drawCorner();
         break;
       default:
         break;
@@ -77,7 +119,7 @@ class CustomGrid{
     float gh = 1.0*height/grid;
     stroke(255);
     noFill();
-    strokeWeight(mainGridWeight);
+    strokeWeight(strokeWidth);
     strokeCap(SQUARE);
     for(int x = 0; x <= grid; ++x){
       if(dashed){
@@ -102,7 +144,7 @@ class CustomGrid{
     float sh = gh/subGrid;
     stroke(255);
     noFill();
-    strokeWeight(subGridWeight);
+    strokeWeight(strokeWidth);
     strokeCap(SQUARE);
     for(int x = 0; x <= grid; ++x){
       for(int sx = 1; sx < subGrid; ++sx){
@@ -119,6 +161,55 @@ class CustomGrid{
           drawDashedLine(0, y*gh+sy*sh, width, y*gh+sy*sh, grid, 10);
         }else{
           line(0, y*gh+sy*sh, width, y*gh+sy*sh);
+        }
+      }
+    }
+  }
+  
+  void drawCorner(){
+    float gw = 1.0*width/grid;
+    float gh = 1.0*height/grid;
+    
+    switch(cornerPattern){
+      case Plus:
+        stroke(255);
+        noFill();
+        strokeWeight(strokeWidth);
+        strokeCap(SQUARE);
+        break;
+      case Cross:
+        stroke(255);
+        noFill();
+        strokeWeight(strokeWidth);
+        strokeCap(SQUARE);
+        break;
+      case Circle:
+        noStroke();
+        fill(255);
+        ellipseMode(CENTER);
+        break;
+      default:
+        break;
+    }
+    for(int y = 0; y <= grid; ++y){
+      for(int x = 0; x <= grid; ++x){
+        float px = x*gw;
+        float py = y*gh;
+        switch(cornerPattern){
+          case Plus:
+            line(px-cornerShapeSize, py, px+cornerShapeSize, py);
+            line(px, py-cornerShapeSize, px, py+cornerShapeSize);
+            break;
+          case Cross:
+            float corner = cos(0.25*PI) * cornerShapeSize;
+            line(px-corner, py-corner, px+corner, py+corner);
+            line(px-corner, py+corner, px+corner, py-corner);
+            break;
+          case Circle:
+            circle(px, py, cornerShapeSize);
+            break;
+          default:
+            break;
         }
       }
     }
