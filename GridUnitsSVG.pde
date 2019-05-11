@@ -12,7 +12,7 @@ void setup(){
 void draw(){
   if(bSave){
     
-    customGrid.Main(1, 2).export();
+    customGrid.Dashed(true).Main(1, 2).export();
     customGrid.Main(2, 2).export();
     customGrid.Main(3, 2).export();
     customGrid.Main(4, 2).export();
@@ -28,11 +28,10 @@ void draw(){
     customGrid.SubGrid(5, 4, 1).export();
     customGrid.SubGrid(5, 5, 1).export();
     bSave = false;
+    exit();
   }
-  customGrid.pattern = Pattern.SubGrid;
-  customGrid.grid = 4;
-  customGrid.subGrid = 5;
-  customGrid.render();
+  
+  customGrid.Dashed(true).Main(4, 4).render();
   
 }
 
